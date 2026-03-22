@@ -6,7 +6,7 @@ local terminal = require("essential-term.terminal")
 local ui = require("essential-term.ui")
 
 ---Initialise essential-term with user options. Must be called once before any other API.
----@param opts? {shell?:string, size?:integer, close_on_exit?:boolean, start_in_insert?:boolean, sidebar_width?:integer, display_mode?:"horizontal"|"vertical"|"float", colors?:{bg?:string, fg?:string}}
+---@param opts? {shell?:string, size?:integer, close_on_exit?:boolean, start_in_insert?:boolean, sidebar_width?:integer, display_mode?:"horizontal"|"vertical"|"float", border?:string, escape_key?:string|false, colors?:{bg?:string, fg?:string}}
 function M.setup(opts)
   config.setup(opts)
 end

@@ -18,6 +18,9 @@ cmd("EssentialTermPrev",   function() require("essential-term").prev() end,   { 
 cmd("EssentialTermRename", function(args)
   require("essential-term").rename(args.args ~= "" and args.args or nil)
 end, { nargs = "?", desc = "Rename active terminal session" })
+cmd("EssentialTermGotoIndex", function(args)
+  require("essential-term").goto_index(tonumber(args.args))
+end, { nargs = 1, desc = "Go to terminal session by 1-based index" })
 
 -- Keep active_id in sync when entering a terminal buffer
 vim.api.nvim_create_autocmd("BufEnter", {

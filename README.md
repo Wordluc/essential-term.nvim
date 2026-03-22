@@ -82,6 +82,7 @@ require("essential-term").setup({
   border          = "rounded",     -- border style for float mode (see :h nvim_open_win)
   close_on_exit   = true,          -- destroy session when shell exits
   start_in_insert = true,          -- enter insert mode on open/focus
+  escape_key      = "<Esc>",       -- key to exit terminal mode and hide the terminal; false to disable
   colors          = {              -- optional terminal window colors
     bg = nil,                      --   hex color string, e.g. "#1e1e2e"; nil uses default bg
     fg = nil,                      --   hex color string; nil uses default fg
@@ -107,6 +108,7 @@ require("essential-term").setup({
 | `EssentialTermNext` | Cycle to the next session |
 | `EssentialTermPrev` | Cycle to the previous session |
 | `EssentialTermRename [name]` | Rename the active session (prompts if no argument given) |
+| `EssentialTermGotoIndex <n>` | Jump directly to the session at 1-based index `n` |
 
 ## Lua API
 
