@@ -152,10 +152,11 @@ local function setup_tabline_keymaps(bufnr)
   vim.keymap.set("n", "<LeftRelease>", click_tab, { noremap = true, silent = true, buffer = bufnr })
 end
 
----Open a one-line floating tabline positioned directly above the terminal
----float window `term_winnr`. If the tabline is already visible, refreshes it.
+---Open a one-line floating tabline positioned at the top of the terminal
+---window `term_winnr`. Works for both float and split windows.
+---If the tabline is already visible, refreshes it.
 ---Tabs are mouse- and `<CR>`-clickable to switch sessions.
----@param term_winnr integer Window id of the active floating terminal window
+---@param term_winnr integer Window id of the active terminal window
 function M.show_tabline(term_winnr)
   if M._tabline and vim.api.nvim_win_is_valid(M._tabline.winid) then
     M.refresh_tabline()
@@ -165,12 +166,28 @@ function M.show_tabline(term_winnr)
   ensure_hl()
   local wincfg = vim.api.nvim_win_get_config(term_winnr)
 
+  local row, col, width, zindex
+  if wincfg.relative and wincfg.relative ~= "" then
+    -- Float window: place tabline one row above the float
+    row    = wincfg.row - 1
+    col    = wincfg.col
+    width  = wincfg.width + 2
+    zindex = (wincfg.zindex or 50) + 1
+  else
+    -- Split window: overlay the tabline at the top-left of the window
+    local pos = vim.api.nvim_win_get_position(term_winnr)
+    row    = pos[1]
+    col    = pos[2]
+    width  = vim.api.nvim_win_get_width(term_winnr)
+    zindex = 50
+  end
+
   M._tabline = NuiPopup({
     relative    = "editor",
-    position    = { row = wincfg.row - 1, col = wincfg.col },
-    size        = { width = wincfg.width + 2, height = 1 },
+    position    = { row = row, col = col },
+    size        = { width = width, height = 1 },
     border      = { style = "none" },
-    zindex      = (wincfg.zindex or 50) + 1,
+    zindex      = zindex,
     enter       = false,
     focusable   = true,
     buf_options = {

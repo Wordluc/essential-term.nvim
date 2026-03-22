@@ -38,6 +38,11 @@ local function open_window()
       win_cfg.title_pos = "center"
     end
     win = vim.api.nvim_open_win(tmp, true, win_cfg)
+  elseif mode == "vertical" then
+    local width = math.floor(vim.o.columns * pct)
+    vim.cmd("botright vsplit")
+    win = vim.api.nvim_get_current_win()
+    vim.api.nvim_win_set_width(win, width)
   else  -- "horizontal" (default)
     local height = math.floor(vim.o.lines * pct)
     vim.cmd("botright " .. height .. " split")
@@ -213,7 +218,7 @@ function M.destroy(id)
 
   -- Auto-close path (on_exit): if a terminal window is still visible,
   -- re-show the appropriate UI without requiring user interaction.
-  if config.options.display_mode == "float" then
+  if config.options.display_mode == "float" or config.options.display_mode == "vertical" then
     for _, t in ipairs(state._terms) do
       if t.winnr and vim.api.nvim_win_is_valid(t.winnr) then
         ui.show_tabline(t.winnr)

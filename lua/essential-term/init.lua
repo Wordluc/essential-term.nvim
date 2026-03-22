@@ -6,7 +6,7 @@ local terminal = require("essential-term.terminal")
 local ui = require("essential-term.ui")
 
 ---Initialise essential-term with user options. Must be called once before any other API.
----@param opts? {shell?:string, size?:integer, close_on_exit?:boolean, start_in_insert?:boolean, sidebar_width?:integer, display_mode?:"horizontal"|"float", colors?:{bg?:string, fg?:string}}
+---@param opts? {shell?:string, size?:integer, close_on_exit?:boolean, start_in_insert?:boolean, sidebar_width?:integer, display_mode?:"horizontal"|"vertical"|"float", colors?:{bg?:string, fg?:string}}
 function M.setup(opts)
   config.setup(opts)
 end
@@ -30,7 +30,8 @@ end
 
 local function maybe_show_sidebar(term)
   if not (term and term.winnr and vim.api.nvim_win_is_valid(term.winnr)) then return end
-  if config.options.display_mode == "float" then
+  local mode = config.options.display_mode
+  if mode == "float" or mode == "vertical" then
     if state.count() >= 2 then
       ui.show_tabline(term.winnr)
     else

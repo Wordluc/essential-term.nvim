@@ -1,12 +1,16 @@
 # essential-term.nvim
 
-A lightweight Neovim terminal plugin with multiple named sessions, two display modes, and a built-in session-picker UI.
+A lightweight Neovim terminal plugin with multiple named sessions, three display modes, and a built-in session-picker UI.
 
 ## Demo
 
 ### Horizontal mode
 
 ![Horizontal mode demo](./assets/horizontal.gif)
+
+### Vertical mode
+
+![Vertical mode demo](./assets/vertical.gif)
 
 ### Float mode
 
@@ -16,9 +20,9 @@ A lightweight Neovim terminal plugin with multiple named sessions, two display m
 
 - Multiple terminal sessions, each with a persistent buffer and shell process
 - Sessions survive window closes — only the window is hidden, not the shell
-- Two display modes: `horizontal` (bottom split) and `float` (centered floating window)
+- Three display modes: `horizontal` (bottom split), `vertical` (right split), and `float` (centered floating window)
 - **Horizontal mode:** a sidebar listing all sessions appears automatically when 2+ sessions are open
-- **Float mode:** a tabline above the float shows all sessions
+- **Vertical / Float mode:** a tabline shows all sessions when 2+ sessions are open
 - Both the sidebar and tabline are mouse-clickable for direct session switching
 - Cycle between sessions without closing/reopening splits
 - Rename sessions interactively
@@ -39,7 +43,7 @@ A lightweight Neovim terminal plugin with multiple named sessions, two display m
   dependencies = { "MunifTanjim/nui.nvim" },
   config = function()
     require("essential-term").setup({
-      display_mode = "horizontal", -- or "float"
+      display_mode = "horizontal", -- or "vertical" or "float"
       size = 70,                   -- percentage of editor height/width
     })
   end,
@@ -73,7 +77,7 @@ All options and their defaults:
 require("essential-term").setup({
   shell           = vim.o.shell,   -- shell executable
   size            = 70,            -- percentage of editor lines/columns used by the terminal
-  display_mode    = "horizontal",  -- "horizontal" | "float"
+  display_mode    = "horizontal",  -- "horizontal" | "vertical" | "float"
   sidebar_width   = 22,            -- width of the session-picker sidebar (horizontal mode)
   border          = "rounded",     -- border style for float mode (see :h nvim_open_win)
   close_on_exit   = true,          -- destroy session when shell exits
@@ -90,6 +94,7 @@ require("essential-term").setup({
 | Mode | Behaviour |
 |------|-----------|
 | `"horizontal"` | Opens a bottom split. A sidebar listing sessions appears on the left of the terminal when 2+ sessions exist. |
+| `"vertical"` | Opens a right-side vertical split. A one-line tabline overlays the top of the terminal when 2+ sessions exist. |
 | `"float"` | Opens a centered floating window with a rounded border. A one-line tabline floats above it when 2+ sessions exist. |
 
 ## Commands
