@@ -9,6 +9,7 @@ M.defaults = {
 	display_mode = "horizontal", -- "horizontal" | "vertical" | "float"
 	border = "rounded",          -- border style for float mode
 	escape_key = "<Esc>",        -- key to exit terminal mode and close the terminal window; false to disable
+	use_normalMode_key = "<C-n>",-- key to go to normal  mode in terminal window
 	colors = { bg = nil, fg = nil },
 }
 
@@ -16,7 +17,7 @@ M.options = {}
 
 ---Merge `opts` with `M.defaults` and store the result in `M.options`.
 ---Called once from `essential-term.setup()` during plugin initialisation.
----@param opts? {shell?:string, size?:integer, close_on_exit?:boolean, start_in_insert?:boolean, sidebar_width?:integer, display_mode?:"horizontal"|"vertical"|"float", border?:string, escape_key?:string|false, colors?:{bg?:string, fg?:string}}
+---@param opts? {shell?:string, size?:integer, close_on_exit?:boolean, start_in_insert?:boolean, sidebar_width?:integer, display_mode?:"horizontal"|"vertical"|"float", border?:string, escape_key?:string|false, colors?:{bg?:string, fg?:string},use_normalMode_key?:string}
 function M.setup(opts)
 	M.options = vim.tbl_deep_extend("force", M.defaults, opts or {})
 end

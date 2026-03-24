@@ -112,6 +112,13 @@ function M.create(name)
       end)
     end, { buffer = bufnr, silent = true, desc = "Exit terminal mode and hide" })
   end
+  
+  local normalMode = config.options.use_normalMode_key
+  if normalMode and normalMode ~= "" then
+  	vim.keymap.set("t", normalMode, function()
+  	  vim.cmd("stopinsert")
+  	end, { buffer = bufnr, silent = true, desc = "Set to normal mode" })
+  end
 
   if config.options.start_in_insert then
     vim.cmd("startinsert")
