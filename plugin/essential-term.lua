@@ -2,45 +2,45 @@
 -- Registers user commands and autocmds.
 
 if vim.g.loaded_essential_term then
-  return
+	return
 end
 vim.g.loaded_essential_term = true
 
 local function cmd(name, fn, opts)
-  vim.api.nvim_create_user_command(name, fn, opts or {})
+	vim.api.nvim_create_user_command(name, fn, opts or {})
 end
 
 cmd("EssentialTermToggle", function() require("essential-term").toggle() end, { desc = "Toggle terminal panel" })
-cmd("EssentialTermNew",    function() require("essential-term").new() end,    { desc = "Create new terminal session" })
-cmd("EssentialTermClose",  function() require("essential-term").close() end,  { desc = "Close active terminal session" })
-cmd("EssentialTermNext",   function() require("essential-term").next() end,   { desc = "Go to next terminal session" })
-cmd("EssentialTermPrev",   function() require("essential-term").prev() end,   { desc = "Go to previous terminal session" })
+cmd("EssentialTermNew", function() require("essential-term").new() end, { desc = "Create new terminal session" })
+cmd("EssentialTermClose", function() require("essential-term").close() end, { desc = "Close active terminal session" })
+cmd("EssentialTermNext", function() require("essential-term").next() end, { desc = "Go to next terminal session" })
+cmd("EssentialTermPrev", function() require("essential-term").prev() end, { desc = "Go to previous terminal session" })
 cmd("EssentialTermRename", function(args)
-  require("essential-term").rename(args.args ~= "" and args.args or nil)
+	require("essential-term").rename(args.args ~= "" and args.args or nil)
 end, { nargs = "?", desc = "Rename active terminal session" })
 cmd("EssentialTermGotoIndex", function(args)
-  require("essential-term").goto_index(tonumber(args.args))
+	require("essential-term").goto_index(tonumber(args.args))
 end, { nargs = 1, desc = "Go to terminal session by 1-based index" })
 
 -- Keep active_id in sync when entering a terminal buffer
 vim.api.nvim_create_autocmd("BufEnter", {
-  group = vim.api.nvim_create_augroup("EssentialTermBufEnter", { clear = true }),
-  callback = function()
-    local bufnr = vim.api.nvim_get_current_buf()
-    local state = require("essential-term.state")
-    local term = state.get_by_bufnr(bufnr)
-    if term then
-      state.active_id = term.id
-      -- Update winnr in case the window was changed externally
-      term.winnr = vim.api.nvim_get_current_win()
-      require("essential-term.ui").refresh()
-    end
-  end,
+	group = vim.api.nvim_create_augroup("EssentialTermBufEnter", { clear = true }),
+	callback = function()
+		local bufnr = vim.api.nvim_get_current_buf()
+		local state = require("essential-term.state")
+		local term = state.get_by_bufnr(bufnr)
+		if term then
+			state.active_id = term.id
+			-- Update winnr in case the window was changed externally
+			term.winnr = vim.api.nvim_get_current_win()
+			require("essential-term.ui").refresh()
+		end
+	end,
 })
 
 -- Reload file buffers when leaving a terminal so external changes are picked up
 vim.api.nvim_create_autocmd({ "TermClose", "TermLeave", "BufLeave" }, {
-  group = vim.api.nvim_create_augroup("EssentialTermChecktime", { clear = true }),
+	group = vim.api.nvim_create_augroup("EssentialTermChecktime", { clear = true }),
 	callback = function()
 		if vim.o.buftype ~= "nofile" then
 			vim.cmd("silent! checktime")
@@ -50,18 +50,18 @@ vim.api.nvim_create_autocmd({ "TermClose", "TermLeave", "BufLeave" }, {
 
 -- Handle shell exit (when close_on_exit = false, clean up closed buffers manually)
 vim.api.nvim_create_autocmd("TermClose", {
-  group = vim.api.nvim_create_augroup("EssentialTermClose", { clear = true }),
-  callback = function()
-    local bufnr = vim.api.nvim_get_current_buf()
-    local state = require("essential-term.state")
-    local term = state.get_by_bufnr(bufnr)
-    if term then
-      -- The terminal module's on_exit already handles close_on_exit=true.
-      -- If the window closed but the term is still in state (close_on_exit=false),
-      -- mark the window as nil so state stays consistent.
-      if term.winnr and not vim.api.nvim_win_is_valid(term.winnr) then
-        term.winnr = nil
-      end
-    end
-  end,
+	group = vim.api.nvim_create_augroup("EssentialTermClose", { clear = true }),
+	callback = function()
+		local bufnr = vim.api.nvim_get_current_buf()
+		local state = require("essential-term.state")
+		local term = state.get_by_bufnr(bufnr)
+		if term then
+			-- The terminal module's on_exit already handles close_on_exit=true.
+			-- If the window closed but the term is still in state (close_on_exit=false),
+			-- mark the window as nil so state stays consistent.
+			if term.winnr and not vim.api.nvim_win_is_valid(term.winnr) then
+				term.winnr = nil
+			end
+		end
+	end,
 })

@@ -12,10 +12,10 @@ M.active_id = nil
 ---@param entry table
 ---@return table
 function M.add(entry)
-  entry.id = M._next_id
-  M._next_id = M._next_id + 1
-  table.insert(M._terms, entry)
-  return entry
+	entry.id = M._next_id
+	M._next_id = M._next_id + 1
+	table.insert(M._terms, entry)
+	return entry
 end
 
 ---Remove the terminal with the given id from the registry.
@@ -23,83 +23,84 @@ end
 ---@param id integer
 ---@return boolean `true` if an entry was found and removed, `false` otherwise
 function M.remove(id)
-  for i, term in ipairs(M._terms) do
-    if term.id == id then
-      table.remove(M._terms, i)
-      if M.active_id == id then
-        -- set active to the last remaining term, or nil
-        if #M._terms > 0 then
-          M.active_id = M._terms[#M._terms].id
-        else
-          M.active_id = nil
-        end
-      end
-      return true
-    end
-  end
-  return false
+	for i, term in ipairs(M._terms) do
+		if term.id == id then
+			table.remove(M._terms, i)
+			if M.active_id == id then
+				-- set active to the last remaining term, or nil
+				if #M._terms > 0 then
+					M.active_id = M._terms[#M._terms].id
+				else
+					M.active_id = nil
+				end
+			end
+			return true
+		end
+	end
+	return false
 end
 
 ---Return the terminal entry with the given id, or `nil` if not found.
 ---@param id integer
 ---@return {id:integer, bufnr:integer, job_id:integer|nil, name:string, winnr:integer|nil}|nil
 function M.get(id)
-  for _, term in ipairs(M._terms) do
-    if term.id == id then
-      return term
-    end
-  end
-  return nil
+	for _, term in ipairs(M._terms) do
+		if term.id == id then
+			return term
+		end
+	end
+	return nil
 end
 
 ---Return the currently active terminal entry, or `nil` if no session is active.
 ---@return {id:integer, bufnr:integer, job_id:integer|nil, name:string, winnr:integer|nil}|nil
 function M.get_active()
-  if M.active_id then
-    return M.get(M.active_id)
-  end
-  return nil
+	if M.active_id then
+		return M.get(M.active_id)
+	end
+	return nil
 end
 
 ---Return the terminal entry whose buffer matches `bufnr`, or `nil` if not found.
 ---@param bufnr integer
 ---@return {id:integer, bufnr:integer, job_id:integer|nil, name:string, winnr:integer|nil}|nil
 function M.get_by_bufnr(bufnr)
-  for _, term in ipairs(M._terms) do
-    if term.bufnr == bufnr then
-      return term
-    end
-  end
-  return nil
+	for _, term in ipairs(M._terms) do
+		if term.bufnr == bufnr then
+			return term
+		end
+	end
+	return nil
 end
 
 ---Return the total number of registered terminal sessions.
 ---@return integer
 function M.count()
-  return #M._terms
+	return #M._terms
 end
 
 ---Return the 1-based index of the terminal with the given id, or `nil` if not found.
 ---@param id integer
 ---@return integer|nil
 function M.index_of(id)
-  for i, term in ipairs(M._terms) do
-    if term.id == id then
-      return i
-    end
-  end
-  return nil
+	for i, term in ipairs(M._terms) do
+		if term.id == id then
+			return i
+		end
+	end
+	return nil
 end
 
 ---Return true if essential-term is open otherwise return false
 function M.is_open()
-  local curWin = M.get_active()
-  if curWin == nil then
-  	return false
-  end
-  if curWin.winnr == nil then
-  	return false
-  end
-  return true
+	local curWin = M.get_active()
+	if curWin == nil then
+		return false
+	end
+	if curWin.winnr == nil then
+		return false
+	end
+	return true
 end
+
 return M

@@ -7,9 +7,9 @@ M.defaults = {
 	start_in_insert = true,
 	sidebar_width = 22,
 	display_mode = "horizontal", -- "horizontal" | "vertical" | "float"
-	border = "rounded",          -- border style for float mode
-	escape_key = "<Esc>",        -- key to exit terminal mode and close the terminal window; false to disable
-	use_normalMode_key = "<C-n>",-- key to go to normal  mode in terminal window
+	border = "rounded",        -- border style for float mode
+	escape_key = "<Esc>",      -- key to exit terminal mode and close the terminal window; false to disable
+	use_normalMode_key = "<C-n>", -- key to go to normal  mode in terminal window
 	colors = { bg = nil, fg = nil },
 }
 
