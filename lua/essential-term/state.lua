@@ -91,4 +91,14 @@ function M.index_of(id)
   return nil
 end
 
+function M.is_open()
+  local curWin = M.get_active()
+  if curWin == nil then
+  	return false
+  end
+  if curWin.winnr == nil then
+  	return false
+  end
+  return true
+end
 return M

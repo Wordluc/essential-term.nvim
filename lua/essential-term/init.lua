@@ -121,6 +121,9 @@ function M.next()
   if state.count() == 0 then
     return
   end
+  if not state.is_open() then
+  	return
+  end
 
   local idx = state.index_of(state.active_id) or 1
   local next_idx = (idx % state.count()) + 1
@@ -139,6 +142,9 @@ end
 function M.prev()
   if state.count() == 0 then
     return
+  end
+  if not state.is_open() then
+  	return
   end
 
   local idx = state.index_of(state.active_id) or 1
