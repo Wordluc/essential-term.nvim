@@ -5,11 +5,16 @@ local config = require("essential-term.config")
 local terminal = require("essential-term.terminal")
 local ui = require("essential-term.ui")
 
----Initialise essential-term with user options. Must be called once before any other API.
----@param opts? {shell?:string, size?:integer, close_on_exit?:boolean, start_in_insert?:boolean, sidebar_width?:integer, display_mode?:"horizontal"|"vertical"|"float", border?:string, escape_key?:string|false, colors?:{bg?:string, fg?:string},use_normalMode_key?:string}
+---Merge `opts` with `M.defaults` and store the result in `M.options`.
+---Called once from `essential-term.setup()` during plugin initialisation.
+---@param opts? Options
 function M.setup(opts)
-	config.setup(opts)
-
+	config.options = vim.tbl_deep_extend("force", config.defaults, opts or {})
+	for key, what in pairs(config.options.start_mapping) do
+		vim.keymap.set(what.mode, key, function()
+			Execute_mapping(what)
+		end)
+	end
 	vim.api.nvim_create_autocmd("VimResized", {
 		group = vim.api.nvim_create_augroup("EssentialTermResize", { clear = true }),
 		callback = function()

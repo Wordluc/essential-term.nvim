@@ -1,3 +1,4 @@
+require("essential-term.keys")
 local M = {}
 
 local state = require("essential-term.state")
@@ -104,28 +105,10 @@ function M.create(name)
 	term.job_id = job_id
 	state.active_id = term.id
 
-	local esc = config.options.escape_key
-	if esc and esc ~= "" then
-		vim.keymap.set("t", esc, function()
-			vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-\\><C-n>", true, false, true), "n", false)
-			vim.schedule(function()
-				M.hide(term.id)
-				ui.hide_sidebar()
-				ui.hide_tabline()
-			end)
-		end, { buffer = bufnr, silent = true, desc = "Exit terminal mode and hide" })
-	end
-
-	local normalMode = config.options.use_normalMode_key
-	if normalMode and normalMode ~= "" then
-		vim.keymap.set("t", normalMode, function()
-			vim.cmd("stopinsert")
-		end, { buffer = bufnr, silent = true, desc = "Set to normal mode" })
-	end
-
 	if config.options.start_in_insert then
 		vim.cmd("startinsert")
 	end
+	Set_keys_mapping(config.options.mapping, bufnr)
 
 	return term
 end
