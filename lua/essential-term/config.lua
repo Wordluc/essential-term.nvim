@@ -17,7 +17,10 @@
 --- @field colors?         colors
 --- @field mapping?        table<string, mapping>
 --- @field start_mapping?        table<string, mapping>
----
+
+--- @class My
+---	@field defaults Options
+---	@field options Options
 local M = {}
 
 --- @value defaults Options
@@ -43,7 +46,6 @@ M.defaults =
 	}
 }
 
---- @value options Options
 M.options = {}
 
 return M

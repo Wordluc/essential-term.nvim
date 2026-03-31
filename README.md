@@ -47,14 +47,6 @@ A lightweight Neovim terminal plugin with multiple named sessions, three display
       size = 70,                   -- percentage of editor height/width
     })
   end,
-  keys = {
-    { "<C-`>",  "<cmd>EssentialTermToggle<cr>", mode = { "n", "t" } },
-    { "<C-\\>", "<cmd>EssentialTermToggle<cr>", mode = { "n", "t" } },
-    { "<C-t>",  "<cmd>EssentialTermNew<cr>",    mode = { "n", "t" } },
-    { "<C-x>",  "<cmd>EssentialTermClose<cr>",  mode = { "n", "t" } },
-    { "<C-h>",  "<cmd>EssentialTermPrev<cr>",   mode = { "t" } },
-    { "<C-l>",  "<cmd>EssentialTermNext<cr>",   mode = { "t" } },
-  },
 }
 ```
 
@@ -75,18 +67,24 @@ All options and their defaults:
 
 ```lua
 require("essential-term").setup({
-  shell           = vim.o.shell,   -- shell executable
-  size            = 70,            -- percentage of editor lines/columns used by the terminal
-  display_mode    = "horizontal",  -- "horizontal" | "vertical" | "float"
-  sidebar_width   = 22,            -- width of the session-picker sidebar (horizontal mode)
-  border          = "rounded",     -- border style for float mode (see :h nvim_open_win)
-  close_on_exit   = true,          -- destroy session when shell exits
-  start_in_insert = true,          -- enter insert mode on open/focus
-  escape_key      = "<Esc>",       -- key to exit terminal mode and hide the terminal; false to disable
-  colors          = {              -- optional terminal window colors
-    bg = nil,                      --   hex color string, e.g. "#1e1e2e"; nil uses default bg
-    fg = nil,                      --   hex color string; nil uses default fg
-  },
+	shell = vim.o.shell,
+	size = 70,
+	close_on_exit = true,
+	start_in_insert = true,
+	sidebar_width = 22,
+	display_mode = "horizontal", -- "horizontal" | "vertical" | "float"
+	border = "rounded",       -- border style for float mode
+	colors = { bg = nil, fg = nil },
+	start_mapping = {
+		["<C-\\>"] = { mode = { "n", "t" }, what = "EssentialTermToggle" },
+	},
+	mapping = {
+		["<Esc>"] = { mode = { "i" }, what = "stopinsert", },
+		["<C-t>"] = { mode = { "n", "t" }, what = "EssentialTermNew" },
+		["<C-x>"] = { mode = { "n", "t" }, what = "EssentialTermClose" },
+		["<C-h>"] = { mode = { "n", "t" }, what = "EssentialTermPrev" },
+		["<C-l>"] = { mode = { "n", "t" }, what = "EssentialTermNext" },
+	}
 })
 ```
 
@@ -133,7 +131,8 @@ lua/essential-term/
 ├── state.lua     -- Data model (registry of sessions)
 ├── terminal.lua  -- Lifecycle: create, show, hide, swap, destroy
 ├── ui.lua        -- Sidebar (horizontal) + tabline (float) renderers
-└── config.lua    -- Defaults + user config merge
+├── config.lua    -- Defaults + user config merge
+└── keys.lua      -- Utils to apply keys mapping
 plugin/
 └── essential-term.lua  -- User commands + autocmds (auto-sourced)
 ```
