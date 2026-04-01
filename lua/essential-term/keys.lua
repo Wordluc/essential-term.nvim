@@ -15,7 +15,6 @@ function Execute_mapping(mapping)
 	if type(mapping.what) == "function" then
 		mapping.what()
 	elseif type(mapping.what) == "string" then
-		print(mapping.what)
 		vim.cmd(mapping.what)
 	end
 end
