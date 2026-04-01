@@ -38,7 +38,7 @@ M.defaults =
 		["<C-\\>"] = { mode = { "n", "t" }, what = "EssentialTermToggle" },
 	},
 	mapping = {
-		["<Esc>"] = { mode = { "i" }, what = "stopinsert", },
+		["<Esc>"] = { mode = { "t" }, what = "stopinsert", },
 		["<C-t>"] = { mode = { "n", "t" }, what = "EssentialTermNew" },
 		["<C-x>"] = { mode = { "n", "t" }, what = "EssentialTermClose" },
 		["<C-h>"] = { mode = { "n", "t" }, what = "EssentialTermPrev" },
