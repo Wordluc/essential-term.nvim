@@ -91,7 +91,9 @@ function M.create(name)
 		winnr = winnr,
 	})
 
-	local job_id = vim.fn.termopen(config.options.shell, {
+	--Use |jobstart()| with `{term: v:true}` instead.
+	local job_id = vim.fn.jobstart(config.options.shell, {
+		term = true,
 		on_exit = function(_, _, _)
 			if config.options.close_on_exit then
 				-- Schedule so we're not inside the job callback
